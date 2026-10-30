@@ -15,7 +15,7 @@ Página para montar entre todo el equipo la orden del día de la reunión semana
 
 | Archivo | Contenido |
 | --- | --- |
-| `orden-del-dia-equipo.html` | La página completa: estilos, lógica y exportación a PDF. |
+| `index.html` | La página completa: estilos, lógica y exportación a PDF. |
 
 ## Cómo se usa
 
@@ -27,7 +27,7 @@ La página está pensada para publicarse como artifact de claude.ai con estas ca
 
 Para que el equipo pueda escribir, hay que compartir el artifact con permiso de colaborador. Con solo permiso de lectura, la página se ve pero no se puede editar.
 
-Fuera de claude.ai la página se abre, pero no guarda ni comparte los cambios.
+Fuera de claude.ai (por ejemplo, en GitHub Pages) la página se abre y muestra el diseño, pero no guarda ni comparte los cambios ni exporta el PDF.
 
 ## Dependencias
 
