@@ -352,7 +352,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   } catch (_) {}
   if (!db) {
     local = true; readOnly = false; loadLocal();
-    showNotice("Modo local: los cambios solo se guardan en este navegador y no se comparten. Para trabajar en equipo, abre el enlace de claude.ai con tu cuenta.");
+    showNotice("Modo local: los cambios solo se guardan en este navegador y no se comparten.");
   }
   else if (readOnly) showNotice("Tienes acceso de solo lectura. Pide permiso de colaborador para editar.");
   render();
