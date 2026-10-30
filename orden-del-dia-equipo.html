@@ -1,0 +1,355 @@
+<title>Orden del día equipo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Branding Bits & Atoms: rejilla, Inter 900, mono para horas y etiquetas, degradado azul a violeta, botones de esquina recta. */
+:root {
+  --bg: #ffffff; --fg: #020617; --surface: #f8fafc; --muted: #475569; --line: #e2e8f0; --grid: rgba(79, 70, 229, 0.07);
+  --primary: #4f46e5; --accent: #7c3aed; --grad: linear-gradient(90deg, #2563eb, #7c3aed);
+  --on-primary: #ffffff; --plan-soft: #e8e7fb; --warn: #b45309; --warn-soft: #fdeccd; --field: #ffffff;
+  --radius: 12px;
+  --f-body: "Inter", "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0a0a; --fg: #f8fafc; --surface: #111118; --muted: #94a3b8; --line: #26263a; --grid: rgba(129, 140, 248, 0.09);
+    --primary: #818cf8; --accent: #a78bfa; --on-primary: #0a0a0a; --plan-soft: #1c1c3a; --warn: #f0b560; --warn-soft: #2e2210; --field: #0d0d14; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0a0a; --fg: #f8fafc; --surface: #111118; --muted: #94a3b8; --line: #26263a; --grid: rgba(129, 140, 248, 0.09);
+  --primary: #818cf8; --accent: #a78bfa; --on-primary: #0a0a0a; --plan-soft: #1c1c3a; --warn: #f0b560; --warn-soft: #2e2210; --field: #0d0d14; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+  color: var(--fg); font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+  padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+.brand { font-weight: 900; font-size: 22px; letter-spacing: -.02em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; width: fit-content; }
+header { display: flex; flex-direction: column; gap: 12px; }
+h1 { font-weight: 900; font-size: clamp(34px, 6vw, 56px); line-height: 1.05; letter-spacing: -.03em; margin: 0; }
+.lede { color: var(--muted); max-width: 64ch; margin: 0; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.panel { padding: 22px 24px; display: flex; flex-direction: column; gap: 20px; }
+.label { font-family: var(--f-mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--primary); font-weight: 700; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.fields label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 600; min-width: 0; }
+input[type="date"], input[type="time"], input[type="number"], input[type="text"], textarea {
+  font: inherit; font-size: 15px; color: var(--fg); background: var(--field); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; width: 100%; min-width: 0;
+}
+input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.people { display: flex; flex-direction: column; gap: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--field); padding: 6px 12px; border-radius: 999px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.chip input { accent-color: var(--primary); width: 16px; height: 16px; margin: 0; }
+.chip.off { color: var(--muted); font-weight: 500; }
+.addform { display: flex; gap: 8px; flex-wrap: wrap; }
+.addform input { flex: 1 1 200px; width: auto; }
+button { font: inherit; font-size: 14px; font-weight: 700; padding: 9px 18px; border-radius: 0; border: 1px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; }
+button.primary { background: var(--primary); color: var(--on-primary); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.calc { font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.notice { padding: 12px 16px; background: var(--warn-soft); color: var(--warn); font-weight: 600; font-size: 14px; border-left: 3px solid var(--warn); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 24px; font-family: var(--f-mono); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.meta b { color: var(--primary); font-weight: 700; }
+.agenda { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.row { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 20px; align-items: start; }
+.time { font-family: var(--f-mono); font-weight: 700; font-size: 15px; padding-top: 18px; }
+.time small { display: block; font-weight: 500; font-size: 12px; color: var(--muted); letter-spacing: .06em; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 20px; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.item.talk::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--grad); }
+.item.plain { background: transparent; }
+.item h2 { font-weight: 900; font-size: 22px; letter-spacing: -.02em; margin: 0; color: var(--primary); }
+.item.plain h2 { color: var(--fg); }
+.item p { margin: 0; color: var(--muted); }
+.item textarea { resize: none; overflow: hidden; line-height: 1.5; min-height: 84px; }
+.hint { font-size: 12px; color: var(--muted); }
+.empty { padding: 28px; text-align: center; color: var(--muted); }
+@media (max-width: 640px) {
+  .row { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .time { padding-top: 0; }
+  .time small { display: inline; margin-left: 8px; }
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<div class="wrap">
+  <header>
+    <span class="brand">B&amp;A</span>
+    <h1>Orden del día</h1>
+    <p class="lede">Cada persona escribe sus puntos en su tarjeta. El tiempo se reparte solo entre quienes participan y el orden se sortea. Cuando esté listo, se exporta a PDF.</p>
+  </header>
+
+  <div id="notice" class="notice" role="status" hidden></div>
+
+  <section class="card panel" aria-label="Ajustes de la reunión">
+    <span class="label">Reunión</span>
+    <div class="fields">
+      <label>Día<input type="date" id="f-date"></label>
+      <label>Hora de inicio<input type="time" id="f-start"></label>
+      <label>Duración total (min)<input type="number" id="f-dur" min="10" max="480" step="5"></label>
+      <label>Bienvenida (min)<input type="number" id="f-wel" min="0" max="60"></label>
+      <label>Cierre (min)<input type="number" id="f-clo" min="0" max="60"></label>
+    </div>
+    <div class="people">
+      <span class="label">Participan</span>
+      <div class="chips" id="chips"></div>
+      <form class="addform" id="addform">
+        <input type="text" id="newname" placeholder="Añadir otra persona" maxlength="40" autocomplete="off" aria-label="Nombre de la persona">
+        <button type="submit" id="addbtn">Añadir</button>
+      </form>
+    </div>
+    <div class="actions">
+      <button type="button" id="shuffle">Ordenar al azar</button>
+      <button type="button" id="export" class="primary">Exportar a PDF</button>
+      <span class="calc" id="calc"></span>
+    </div>
+  </section>
+
+  <div class="meta" id="meta"></div>
+  <ol class="agenda" id="agenda"></ol>
+</div>
+
+<script>
+(async function () {
+  const $ = (s) => document.querySelector(s);
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  const pad = (n) => String(n).padStart(2, "0");
+  const todayISO = () => { const d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); };
+  const DEF = { date: todayISO(), start: "09:30", duration: 60, welcome: 5, close: 5, people: [], order: [] };
+
+  let cfg = clone(DEF), texts = {}, draft = {}, readOnly = false, db = null, dl = null;
+  const timers = {}, chains = {};
+
+  function showNotice(msg) { const n = $("#notice"); n.textContent = msg; n.hidden = !msg; }
+
+  /* ---------- tiempo y plan ---------- */
+  function toMin(hm) { const m = /^(\d{1,2}):(\d{2})$/.exec(hm || ""); return m ? (+m[1]) * 60 + (+m[2]) : 570; }
+  function toHM(min) { return Math.floor(min / 60) + ":" + pad(min % 60); }
+  function durText(min) { return min % 60 === 0 ? (min / 60) + " h" : min + " min"; }
+  function longDate(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    if (!m) return "";
+    const s = new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
+  function activeOrdered() {
+    const act = cfg.people.filter((p) => p.active);
+    const rank = (p) => { const i = cfg.order.indexOf(p.id); return i < 0 ? 1e6 : i; };
+    return act.map((p, i) => ({ p, i })).sort((a, b) => rank(a.p) - rank(b.p) || a.i - b.i).map((x) => x.p);
+  }
+  function plan() {
+    const people = activeOrdered(), n = people.length;
+    const avail = cfg.duration - cfg.welcome - cfg.close;
+    const slot = n ? Math.max(0, Math.floor(avail / n)) : 0;
+    const extra = n ? Math.max(0, avail - slot * n) : Math.max(0, avail);
+    let t = toMin(cfg.start);
+    const rows = [];
+    const push = (kind, title, min, extraProps) => { rows.push(Object.assign({ kind, title, min, from: toHM(t), to: toHM(t + min) }, extraProps)); t += min; };
+    if (cfg.welcome > 0) push("plain", "Bienvenida", cfg.welcome, { text: "Objetivo de la reunión y orden de intervenciones." });
+    people.forEach((p) => push("talk", p.name, slot, { id: p.id }));
+    const closeMin = cfg.close + extra;
+    if (closeMin > 0) push("plain", "Cierre", closeMin, { text: "Conclusiones y próximos pasos." });
+    return { rows, n, slot, avail };
+  }
+  function bulletsOf(text) {
+    return (text || "").split(/\r?\n/).map((l) => l.replace(/^\s*[-•*·]+\s*/, "").trim()).filter(Boolean);
+  }
+
+  /* ---------- render ---------- */
+  function setVal(el, v) { if (document.activeElement !== el) el.value = v; }
+  function renderPanel() {
+    setVal($("#f-date"), cfg.date); setVal($("#f-start"), cfg.start);
+    setVal($("#f-dur"), cfg.duration); setVal($("#f-wel"), cfg.welcome); setVal($("#f-clo"), cfg.close);
+    ["#f-date", "#f-start", "#f-dur", "#f-wel", "#f-clo", "#newname", "#addbtn", "#shuffle"].forEach((s) => { $(s).disabled = readOnly; });
+    const chips = $("#chips"); chips.textContent = "";
+    cfg.people.forEach((p) => {
+      const l = document.createElement("label"); l.className = "chip" + (p.active ? "" : " off");
+      const c = document.createElement("input"); c.type = "checkbox"; c.checked = p.active; c.disabled = readOnly;
+      c.addEventListener("change", () => togglePerson(p.id, c.checked));
+      const s = document.createElement("span"); s.textContent = p.name;
+      l.append(c, s); chips.append(l);
+    });
+    const { n, slot, avail } = plan();
+    $("#calc").textContent = n ? (n + (n === 1 ? " persona" : " personas") + " · " + slot + " min cada una") : "Marca quién participa";
+    if (n && avail < n) showNotice("No cabe: la reunión es demasiado corta para tantas personas. Aumenta la duración."); else if (!readOnly && db) showNotice("");
+    $("#export").disabled = !n || !dl;
+  }
+  function renderAgenda() {
+    const ae = document.activeElement; let keep = null;
+    if (ae && ae.tagName === "TEXTAREA" && ae.dataset.id) keep = { id: ae.dataset.id, s: ae.selectionStart, e: ae.selectionEnd };
+    $("#meta").innerHTML = "";
+    const mk = (k, v) => { const s = document.createElement("span"); const b = document.createElement("b"); b.textContent = k + " "; s.append(b, document.createTextNode(v)); return s; };
+    $("#meta").append(mk("Día", longDate(cfg.date)), mk("Hora", cfg.start + " h"), mk("Duración", durText(cfg.duration)));
+    const ol = $("#agenda"); ol.textContent = "";
+    const { rows, n } = plan();
+    if (!n) { const li = document.createElement("li"); li.className = "card empty"; li.textContent = "Marca al menos una persona para montar el orden del día."; ol.append(li); return; }
+    rows.forEach((r) => {
+      const li = document.createElement("li"); li.className = "row";
+      const tm = document.createElement("div"); tm.className = "time"; tm.textContent = r.from + " – " + r.to;
+      const sm = document.createElement("small"); sm.textContent = r.min + " min"; tm.append(sm);
+      const it = document.createElement("div"); it.className = "item " + r.kind;
+      const h = document.createElement("h2"); h.textContent = r.title; it.append(h);
+      if (r.kind === "plain") { const p = document.createElement("p"); p.textContent = r.text; it.append(p); }
+      else {
+        const ta = document.createElement("textarea"); ta.dataset.id = r.id; ta.disabled = readOnly;
+        ta.placeholder = "Escribe tus puntos, uno por línea"; ta.setAttribute("aria-label", "Puntos de " + r.title);
+        ta.value = draft[r.id] !== undefined ? draft[r.id] : (texts[r.id] || "");
+        ta.addEventListener("input", () => onType(r.id, ta));
+        ta.addEventListener("change", () => flush(r.id));
+        ta.addEventListener("blur", () => flush(r.id));
+        it.append(ta);
+        const hint = document.createElement("span"); hint.className = "hint"; hint.textContent = "Un punto por línea. Se guarda solo."; it.append(hint);
+      }
+      li.append(tm, it); ol.append(li);
+    });
+    ol.querySelectorAll("textarea").forEach(grow);
+    if (keep) { const t = ol.querySelector('textarea[data-id="' + keep.id + '"]'); if (t) { t.focus(); try { t.setSelectionRange(keep.s, keep.e); } catch (_) {} } }
+  }
+  function grow(t) { t.style.height = "auto"; t.style.height = Math.max(84, t.scrollHeight + 2) + "px"; }
+  function render() { renderPanel(); renderAgenda(); }
+
+  /* ---------- guardado ---------- */
+  function queue(key, fn) {
+    chains[key] = (chains[key] || Promise.resolve()).then(fn).catch(() => showNotice("No se ha podido guardar el último cambio. Vuelve a intentarlo."));
+    return chains[key];
+  }
+  function saveCfg(patch) {
+    if (readOnly || !db) return;
+    Object.assign(cfg, patch); render();
+    const body = clone(cfg);
+    queue("cfg", () => db.doc("agenda/config").set(body));
+  }
+  function onType(id, ta) {
+    draft[id] = ta.value; grow(ta);
+    clearTimeout(timers[id]); timers[id] = setTimeout(() => flush(id), 1500);
+  }
+  function flush(id) {
+    clearTimeout(timers[id]);
+    if (readOnly || !db) return;
+    const t = draft[id];
+    if (t === undefined) return;
+    if (t === (texts[id] || "")) { delete draft[id]; return; }
+    queue("p:" + id, async () => { await db.doc("puntos/" + id).set({ text: t }); if (draft[id] === t) delete draft[id]; });
+  }
+  function togglePerson(id, on) {
+    const people = cfg.people.map((p) => (p.id === id ? Object.assign({}, p, { active: on }) : p));
+    const order = on && cfg.order.indexOf(id) < 0 ? cfg.order.concat(id) : cfg.order;
+    saveCfg({ people, order });
+  }
+  function slug(name) {
+    const s = name.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return s || "persona";
+  }
+  function shuffle() {
+    const ids = cfg.people.filter((p) => p.active).map((p) => p.id);
+    const buf = new Uint32Array(ids.length); crypto.getRandomValues(buf);
+    for (let i = ids.length - 1; i > 0; i--) { const j = buf[i] % (i + 1); [ids[i], ids[j]] = [ids[j], ids[i]]; }
+    const rest = cfg.order.filter((id) => ids.indexOf(id) < 0);
+    saveCfg({ order: ids.concat(rest) });
+  }
+
+  /* ---------- entradas ---------- */
+  const num = (el, lo, hi) => { const v = parseInt(el.value, 10); return Math.min(hi, Math.max(lo, isNaN(v) ? lo : v)); };
+  $("#f-date").addEventListener("change", (e) => { if (e.target.value) saveCfg({ date: e.target.value }); });
+  $("#f-start").addEventListener("change", (e) => { if (e.target.value) saveCfg({ start: e.target.value }); });
+  $("#f-dur").addEventListener("change", (e) => { const v = num(e.target, 10, 480); e.target.value = v; saveCfg({ duration: v }); });
+  $("#f-wel").addEventListener("change", (e) => { const v = num(e.target, 0, 60); e.target.value = v; saveCfg({ welcome: v }); });
+  $("#f-clo").addEventListener("change", (e) => { const v = num(e.target, 0, 60); e.target.value = v; saveCfg({ close: v }); });
+  $("#shuffle").addEventListener("click", shuffle);
+  $("#addform").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = $("#newname").value.trim().slice(0, 40);
+    if (!name || readOnly) return;
+    let id = slug(name), k = 2;
+    while (cfg.people.some((p) => p.id === id)) id = slug(name) + "-" + k++;
+    $("#newname").value = "";
+    saveCfg({ people: cfg.people.concat({ id, name, active: true }), order: cfg.order.concat(id) });
+  });
+
+  /* ---------- PDF ---------- */
+  async function exportPdf() {
+    if (!dl || !window.jspdf) { showNotice("La exportación a PDF no está disponible en esta vista."); return; }
+    Object.keys(draft).forEach(flush);
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    const W = 210, H = 297, M = 16;
+    const P = [79, 70, 229], INK = [2, 6, 23], MUT = [71, 85, 105], LINE = [226, 232, 240], SURF = [248, 250, 252];
+    let y = M;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(P[0], P[1], P[2]); doc.text("B&A", M, y + 6); y += 15;
+    doc.setFontSize(30); doc.setTextColor(INK[0], INK[1], INK[2]); doc.text("Orden del día", M, y + 8); y += 17;
+    doc.setFont("courier", "bold"); doc.setFontSize(8.5); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
+    doc.text(("Fecha " + longDate(cfg.date) + "  ·  Hora " + cfg.start + " h  ·  Duración " + durText(cfg.duration)).toUpperCase(), M, y); y += 4;
+    doc.setDrawColor(LINE[0], LINE[1], LINE[2]); doc.setLineWidth(0.3); doc.line(M, y, W - M, y); y += 7;
+    const cardX = M + 34, cardW = W - M - cardX, textW = cardW - 15;
+    plan().rows.forEach((r) => {
+      let lines = [];
+      if (r.kind === "plain") lines = [{ t: [r.text], italic: false }];
+      else {
+        const b = bulletsOf(texts[r.id] !== undefined || draft[r.id] !== undefined ? (draft[r.id] !== undefined ? draft[r.id] : texts[r.id]) : "");
+        doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+        lines = b.length ? b.map((x) => ({ t: doc.splitTextToSize(x, textW), bullet: true })) : [{ t: ["Sin puntos todavía."], italic: true }];
+      }
+      const count = lines.reduce((a, l) => a + l.t.length, 0);
+      const h = 14 + count * 4.7 + 1.5 * lines.length;
+      if (y + h > H - M) { doc.addPage(); y = M; }
+      doc.setDrawColor(LINE[0], LINE[1], LINE[2]);
+      if (r.kind === "talk") { doc.setFillColor(SURF[0], SURF[1], SURF[2]); doc.roundedRect(cardX, y, cardW, h, 2, 2, "FD"); doc.setFillColor(P[0], P[1], P[2]); doc.rect(cardX, y, 1, h, "F"); }
+      else doc.roundedRect(cardX, y, cardW, h, 2, 2, "S");
+      doc.setFont("courier", "bold"); doc.setFontSize(10.5); doc.setTextColor(INK[0], INK[1], INK[2]); doc.text(r.from + " – " + r.to, M, y + 8);
+      doc.setFont("courier", "normal"); doc.setFontSize(8); doc.setTextColor(MUT[0], MUT[1], MUT[2]); doc.text(r.min + " min", M, y + 12.5);
+      doc.setFont("helvetica", "bold"); doc.setFontSize(14);
+      if (r.kind === "talk") doc.setTextColor(P[0], P[1], P[2]); else doc.setTextColor(INK[0], INK[1], INK[2]);
+      doc.text(r.title, cardX + 6, y + 9);
+      let ty = y + 15.5;
+      doc.setFontSize(10); doc.setTextColor(MUT[0], MUT[1], MUT[2]);
+      lines.forEach((l) => {
+        doc.setFont("helvetica", l.italic ? "italic" : "normal");
+        if (l.bullet) doc.text("•", cardX + 6, ty);
+        l.t.forEach((ln, i) => { doc.text(ln, cardX + (l.bullet ? 10.5 : 6), ty + i * 4.7); });
+        ty += l.t.length * 4.7 + 1.5;
+      });
+      y += h + 4;
+    });
+    try {
+      const st = await dl.save({ filename: "Orden-del-dia-" + cfg.date + ".pdf", data: doc.output("arraybuffer") });
+      if (st && st.status === "saved") showNotice("");
+    } catch (e) {
+      if (!e || e.code !== "declined") showNotice("No se ha podido guardar el PDF. Vuelve a intentarlo.");
+    }
+  }
+  $("#export").addEventListener("click", exportPdf);
+
+  /* ---------- capacidades ---------- */
+  render();
+  try {
+    if (window.claude && claude.use) {
+      const user = await claude.use("user");
+      dl = await claude.use("downloads");
+      db = await claude.use("db");
+      if (user && user.can("data.write") === false) readOnly = true;
+    }
+  } catch (_) {}
+  if (!db) { readOnly = true; showNotice("No se ha podido conectar con los datos compartidos. Abre la página con tu cuenta para ver y editar los puntos."); }
+  else if (readOnly) showNotice("Tienes acceso de solo lectura. Pide permiso de colaborador para editar.");
+  render();
+  if (db) {
+    const fail = () => showNotice("Se ha perdido la conexión con los datos compartidos. Recarga la página.");
+    db.doc("agenda/config").onSnapshot((s) => {
+      const d = s.exists ? s.data() : null;
+      cfg = Object.assign(clone(DEF), d ? clone(d) : {});
+      render();
+    }, fail);
+    db.collection("puntos").onSnapshot((snap) => {
+      const m = {}; snap.docs.forEach((d) => { const v = d.data(); m[d.id] = v && typeof v.text === "string" ? v.text : ""; });
+      texts = m; renderAgenda();
+    }, fail);
+  }
+})();
+</script>
