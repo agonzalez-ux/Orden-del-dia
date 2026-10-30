@@ -23,11 +23,11 @@ La página está pensada para publicarse como artifact de claude.ai con estas ca
 
 - `db`: guarda la configuración (`agenda/config`) y los puntos de cada persona (`puntos/<id>`) y los comparte en directo.
 - `user`: indica si la persona puede editar.
-- `downloads`: permite guardar el PDF.
+- `downloads`: permite guardar el PDF (en modo local se descarga directamente).
 
 Para que el equipo pueda escribir, hay que compartir el artifact con permiso de colaborador. Con solo permiso de lectura, la página se ve pero no se puede editar.
 
-Fuera de claude.ai (por ejemplo, en GitHub Pages) la página se abre y muestra el diseño, pero no guarda ni comparte los cambios ni exporta el PDF.
+Fuera de claude.ai (por ejemplo, en GitHub Pages) la página funciona en modo local: se puede editar, sortear el orden y exportar el PDF, pero los cambios solo se guardan en ese navegador y no se comparten con el resto del equipo. Para trabajar en equipo hay que usar el enlace de claude.ai.
 
 ## Dependencias
 

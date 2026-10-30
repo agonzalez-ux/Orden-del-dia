@@ -124,7 +124,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   const todayISO = () => { const d = new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); };
   const DEF = { date: todayISO(), start: "09:30", duration: 60, welcome: 5, close: 5, people: [], order: [] };
 
-  let cfg = clone(DEF), texts = {}, draft = {}, readOnly = false, db = null, dl = null;
+  let cfg = clone(DEF), texts = {}, draft = {}, readOnly = false, db = null, dl = null, local = false;
   const timers = {}, chains = {};
 
   function showNotice(msg) { const n = $("#notice"); n.textContent = msg; n.hidden = !msg; }
@@ -179,7 +179,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     const { n, slot, avail } = plan();
     $("#calc").textContent = n ? (n + (n === 1 ? " persona" : " personas") + " · " + slot + " min cada una") : "Marca quién participa";
     if (n && avail < n) showNotice("No cabe: la reunión es demasiado corta para tantas personas. Aumenta la duración."); else if (!readOnly && db) showNotice("");
-    $("#export").disabled = !n || !dl;
+    $("#export").disabled = !n || !(dl || local);
   }
   function renderAgenda() {
     const ae = document.activeElement; let keep = null;
@@ -220,8 +220,20 @@ button:disabled { opacity: .45; cursor: not-allowed; }
     chains[key] = (chains[key] || Promise.resolve()).then(fn).catch(() => showNotice("No se ha podido guardar el último cambio. Vuelve a intentarlo."));
     return chains[key];
   }
+  const LS = "orden-del-dia-local";
+  function saveLocal() { try { localStorage.setItem(LS, JSON.stringify({ cfg, texts })); } catch (_) {} }
+  function loadLocal() {
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem(LS) || "null"); } catch (_) {}
+    if (d && d.cfg) { cfg = Object.assign(clone(DEF), d.cfg); texts = d.texts || {}; return; }
+    const names = [["agustin", "Agustín", true], ["joshua", "Joshua", true], ["aroa", "Aroa", true], ["mateo", "Mateo", true], ["moises", "Moisés", true], ["edison", "Edison", false]];
+    cfg.people = names.map((n) => ({ id: n[0], name: n[1], active: n[2] }));
+    cfg.order = names.filter((n) => n[2]).map((n) => n[0]);
+  }
   function saveCfg(patch) {
-    if (readOnly || !db) return;
+    if (readOnly) return;
+    if (local) { Object.assign(cfg, patch); render(); saveLocal(); return; }
+    if (!db) return;
     Object.assign(cfg, patch); render();
     const body = clone(cfg);
     queue("cfg", () => db.doc("agenda/config").set(body));
@@ -232,10 +244,11 @@ button:disabled { opacity: .45; cursor: not-allowed; }
   }
   function flush(id) {
     clearTimeout(timers[id]);
-    if (readOnly || !db) return;
+    if (readOnly || (!db && !local)) return;
     const t = draft[id];
     if (t === undefined) return;
     if (t === (texts[id] || "")) { delete draft[id]; return; }
+    if (local) { texts[id] = t; delete draft[id]; saveLocal(); return; }
     queue("p:" + id, async () => { await db.doc("puntos/" + id).set({ text: t }); if (draft[id] === t) delete draft[id]; });
   }
   function togglePerson(id, on) {
@@ -275,7 +288,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 
   /* ---------- PDF ---------- */
   async function exportPdf() {
-    if (!dl || !window.jspdf) { showNotice("La exportación a PDF no está disponible en esta vista."); return; }
+    if (!(dl || local) || !window.jspdf) { showNotice("La exportación a PDF no está disponible en esta vista."); return; }
     Object.keys(draft).forEach(flush);
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -317,6 +330,7 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       });
       y += h + 4;
     });
+    if (!dl) { doc.save("Orden-del-dia-" + cfg.date + ".pdf"); return; }
     try {
       const st = await dl.save({ filename: "Orden-del-dia-" + cfg.date + ".pdf", data: doc.output("arraybuffer") });
       if (st && st.status === "saved") showNotice("");
@@ -336,7 +350,10 @@ button:disabled { opacity: .45; cursor: not-allowed; }
       if (user && user.can("data.write") === false) readOnly = true;
     }
   } catch (_) {}
-  if (!db) { readOnly = true; showNotice("No se ha podido conectar con los datos compartidos. Abre la página con tu cuenta para ver y editar los puntos."); }
+  if (!db) {
+    local = true; readOnly = false; loadLocal();
+    showNotice("Modo local: los cambios solo se guardan en este navegador y no se comparten. Para trabajar en equipo, abre el enlace de claude.ai con tu cuenta.");
+  }
   else if (readOnly) showNotice("Tienes acceso de solo lectura. Pide permiso de colaborador para editar.");
   render();
   if (db) {
